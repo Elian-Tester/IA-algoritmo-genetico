@@ -406,7 +406,7 @@ background-color: rgb(73, 208, 168);</string>
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_4">
+   <widget class="QLineEdit" name="podaProbabilidad">
     <property name="geometry">
      <rect>
       <x>1060</x>

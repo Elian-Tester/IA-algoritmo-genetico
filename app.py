@@ -252,10 +252,10 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             hijosCruza.append([idA+idB+"-1" , hijoA])
             hijosCruza.append([idA+idB+"-2" , hijoB])
 
-        self.mutacion(hijosCruza)
+        self.mutacion(hijosCruza, arrayBits)
         
 
-    def mutacion(self, listHijosCruza):
+    def mutacion(self, listHijosCruza, arrayBits):
         mutacionIndividuo = self.mutacionIndividuoText.text()
 
         print("mutacion individuo: "+mutacionIndividuo)
@@ -285,8 +285,97 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         
         """ muestra lista de cruza con los mutados """
         
+        for indiv in range(0, len(listHijosCruza)):
+            print(str(listHijosCruza[indiv]))
+            binario = listHijosCruza[indiv][1]
+            valor = int(binario, 2)
+            print(" - "+ str(valor))
+
+            listHijosCruza[indiv].append(valor)
+        
         for indiv in listHijosCruza:
             print(str(indiv))
+        
+        self.limpieza(listHijosCruza, arrayBits)
+    
+    def limpieza(self, listHijos, arrayBits):
+        rango = float(self.CantidadSolucionesLabel.text()) - 1
+        print("\nLimpieza rango: " + str(rango) )
+        for hijo in listHijos:
+            if hijo[3] <= rango:
+                print(hijo)
+                arrayBits.append([ hijo[0] , hijo[1], hijo[3]])
+
+        print("\n Paddres: ")
+        for padresEhijos in arrayBits:
+            print(str(padresEhijos))
+
+        poblacionMaxima = self.poblacionMaximaText.text()
+        if len(arrayBits) > int(poblacionMaxima) :
+            print("debe ver poda: padre> "+ str(len(arrayBits)))
+            print("pob max: "+poblacionMaxima)
+            
+            self.Poda(arrayBits)
+        else:            
+            print("No ocupa poda: padre>"+ str(len(arrayBits)))
+            print("pob max: "+poblacionMaxima)
+            
+    def Poda(self, arrayBits):
+        print("\nInicia poda")        
+
+        """ agregando probabilidad de poda """
+        for index in range( len(arrayBits) ):
+            print( str(arrayBits[index]) )
+            probabilidadPoda = (random.randint(1, 100)) / 100
+            arrayBits[index].append(probabilidadPoda)    
+        
+        """ calculando PODA """
+        poblacionMaxima = int(self.poblacionMaximaText.text())
+        individuos = len(arrayBits)
+        pp = poblacionMaxima / individuos
+
+        self.podaProbabilidad.setText(str(pp))
+
+        print("\n+ probabilidad:")
+        
+        for index in arrayBits:            
+            print( str(index)) 
+
+        print("\nborrando mayores a poda:")
+
+        listaPodado = []
+        for index in arrayBits:
+            if index[3] <= pp:
+                print( str(index))
+                listaPodado.append(index)
+        
+        print("\npodado:")
+        for index in listaPodado:            
+            print( str(index)) 
+
+        #print("\n Mayor a menor:")
+        #for index in listaPodado:            
+        #    print( str(index)) 
+
+        print("\n Mayor a menor:")
+        listaPodado = sorted(listaPodado, key=lambda individuo: individuo[3], reverse=True)
+        # poblacionMaxima
+        for index in range(len(listaPodado)):        
+            
+            if index < poblacionMaxima:
+                print( str(index) , str(listaPodado[index]))
+            else:
+                print("fuera de limite")
+
+        
+
+
+        print("\n Menor a mayor:")
+        listaPodado = sorted(listaPodado, key=lambda individuo: individuo[3], reverse=False)
+        for index in listaPodado:            
+            print( str(index)) 
+            
+
 
         # mutar gen
     
