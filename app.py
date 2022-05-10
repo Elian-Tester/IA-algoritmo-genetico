@@ -23,16 +23,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.boton2.clicked.connect(self.setTexto)
         self.enviar.clicked.connect(self.getTexto)
         self.CalcularBoton.clicked.connect(self.Calcular)
-        
-        #Aquí van los botones
-        
-    #Aquí van las nuevas funciones
-    #Esta función abre el archivo CSV    
-    #def getCSV(self):
-    #    filePath, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Open file', '/home')
-    #    if filePath != "":
-    #        print ("Dirección",filePath) #Opcional imprimir la dirección del archivo
-    #        self.df = pd.read_csv(str(filePath))
+
 
     def setPlot(self):
         print("mat plot lib")
@@ -47,11 +38,14 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def setTexto(self):
         print("texto en caja")        
-        self.poblacionInicialText.setText("4")
+        self.poblacionInicialText.setText("6")
         self.precisionText.setText("0.1")
         self.rangoInicioText.setText("3")
         self.rangoFinText.setText("8")
         self.poblacionMaximaText.setText("8")
+        self.decendenciaText.setText("0.001")
+        self.mutacionIndividuoText.setText("0.25")
+        self.mutacionGenText.setText("0.40")
 
     def getTexto(self):
         print("enviar")        
@@ -59,9 +53,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         print(textoValor)
 
     def Calcular(self):
-        print("Calculando")
-        #textoValor = self.texto.toPlainText()
-        #print(textoValor)
+        print("Calculando")        
         
         funcion = self.FuncionText.text()
 
@@ -72,6 +64,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         rangoFin = self.rangoFinText.text()
         
         poblacionMaxima = self.poblacionMaximaText.text()
+
+        decendencia = self.decendenciaText.text()
+
 
         print("Funcion: "+funcion)
         print("poblacion Inicial: "+poblacionInicial)
@@ -186,8 +181,153 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
         print("seleccion: "+str(seleccion))
 
-        #abecedario = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "V", "W", "X", "Y", "Z"]
+        probabDecendencia = self.decendenciaText.text()
+        print("Decendencia: "+ probabDecendencia)
 
+        for x in seleccion:
+            if x[2] >= float(probabDecendencia):
+                print("> "+str(x))
+                seleccion.remove(x)
+
+        
+        print("actual: "+str(seleccion))
+        
+        self.cruza(seleccion, arrayBits)
+
+        #abecedario = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "V", "W", "X", "Y", "Z"]
+    
+    def cruza(self, seleccion, arrayBits):
+        print(" \n inicia Cruza: "+ str(seleccion))
+        print(" \n bits list: "+ str(arrayBits))
+
+        hijosCruza = []
+        
+
+        for datoBin in seleccion:
+            idA = str(arrayBits[datoBin[0]][0])
+            idB = str(arrayBits[datoBin[1]][0])
+
+            print("A "+ str(datoBin[0]) +" corte: "+str(datoBin[3])  +" id: "+ idA +" bit: "+ str(arrayBits[datoBin[0]][1]) +" valor: "+ str(arrayBits[datoBin[0]][2]))
+            print("B "+ str(datoBin[1])+ " corte: "+str(datoBin[3])  +" id: "+ idB +" bit: "+ str(arrayBits[datoBin[1]][1]) +" valor: "+ str(arrayBits[datoBin[1]][2]))
+            print("\n")
+
+            hijo1 = list(arrayBits[datoBin[0]][1])
+            hijo2 = list(arrayBits[datoBin[1]][1])
+
+            print("hijo 1: "+str(hijo1))
+            print("hijo 2: "+str(hijo2))
+
+            rang1 = int(datoBin[3])
+            rang2 = len(str(arrayBits[datoBin[0]][1]))
+            print(rang2)
+
+            corteA = ""
+            corteA1 = ""
+            for corte1 in range( 0, rang2):
+                if corte1 >= rang1:
+                    corteA+=hijo1[corte1]
+                else:
+                    corteA1+=hijo1[corte1]
+
+            print("CA: "+corteA)
+            print("CA1: "+corteA1)
+
+            corteB = ""
+            corteB1 = ""
+            for corte2 in range( 0, rang2):
+                if corte2 >= rang1:
+                    corteB+=hijo2[corte2]
+                else:
+                    corteB1+=hijo2[corte2]
+                            
+            print("CB: "+corteB)
+            print("CB1: "+corteB1)
+
+            hijoA = corteA1 + corteB
+            hijoB = corteB1 + corteA
+
+            print("hijo A: "+ hijoA)
+            print("hijo A: "+ hijoB)
+            
+            hijosCruza.append([idA+idB+"-1" , hijoA])
+            hijosCruza.append([idA+idB+"-2" , hijoB])
+
+        self.mutacion(hijosCruza)
+        
+
+    def mutacion(self, listHijosCruza):
+        mutacionIndividuo = self.mutacionIndividuoText.text()
+
+        print("mutacion individuo: "+mutacionIndividuo)
+
+        #print("list hijos: "+str(listHijosCruza))        
+
+        for individuo in listHijosCruza:
+            probabilidadMutacionIndividuo = (random.randint(1, 100)) / 100
+            individuo.append(probabilidadMutacionIndividuo)
+
+        #itera comentarios // puede borrar
+
+        hijosMutacion = []
+
+        for indiv in listHijosCruza:
+            print(str(indiv))
+            if indiv[2] <= float(mutacionIndividuo):
+                hijosMutacion.append(indiv)
+
+        hijosMutados = self.mutarGen(hijosMutacion)
+
+        for indice in range( len(listHijosCruza) ):
+            for indiceMut in hijosMutados:                
+                if listHijosCruza[indice][0] == indiceMut[0]:
+                    print("encontrado")
+                    listHijosCruza[indice][1] = indiceMut[1]
+        
+        """ muestra lista de cruza con los mutados """
+        
+        for indiv in listHijosCruza:
+            print(str(indiv))
+
+        # mutar gen
+    
+    def mutarGen(self, hijosMutar):
+        print("Mutar Gen: ")
+        for i in hijosMutar:
+            #print("< "+str(i))
+            bitsMutar = list(i[1])
+            print("origin: "+str(bitsMutar))
+            
+            mutarBitAux = ""
+            for index in range(len(bitsMutar)):
+                probabilidadMutacionGen = (random.randint(1, 100)) / 100
+
+                if probabilidadMutacionGen <= float(self.mutacionGenText.text()):
+                    if bitsMutar[index] == "0":
+                        bitsMutar[index] = "1"
+                        mutarBitAux+=bitsMutar[index]
+                    else:
+                        bitsMutar[index] = "0"
+                        mutarBitAux+=bitsMutar[index]
+                else:
+                    mutarBitAux+=bitsMutar[index]
+
+            print("xor: "+str(bitsMutar))
+            i[1] = mutarBitAux
+
+        print("Mutados \n")
+        for j in hijosMutar:
+            print( "> "+str(j))
+        
+        return hijosMutar
+
+
+            
+        
+
+
+        
+
+            
 
 if __name__ == "__main__":
     app =  QtWidgets.QApplication(sys.argv)
