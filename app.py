@@ -6,6 +6,7 @@ import sys
 #Importar aquí las librerías a utilizar
 import matplotlib.pyplot as plt
 import random
+import math
 
 from PyQt5 import uic, QtWidgets
 
@@ -27,11 +28,13 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def setPlot(self):
         print("mat plot lib")
-        x=[1,2,3,4,4,5,6,7,8,9,10,11,12,13,14]
-        y=[1,3,2,1,5,4,6,2,8,4,3,1,8,11,12]
+        x=[3.6  ,3.6  ,5      ,5.4   ,6,6.1  ,6.2  ,6.2 ]
+
+        y=[-5.74,-5.74, -23.97,-22.53,-10.06,-6.78,-3.19,-3.19]
+        
         y2=[1,3,4,1,15,4,7,2,6,6,1,7,11,10,14]
         plt.plot(x,y, label='linear')
-        plt.plot(x,y2, label='quadratic')
+        #plt.plot(x,y2, label='quadratic')
         #plt.show()      
         plt.legend()
         plt.show()
@@ -333,6 +336,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         poblacionMaxima = int(self.poblacionMaximaText.text())
         individuos = len(arrayBits)
         pp = poblacionMaxima / individuos
+        self.infoPodaLabel.setText("poblacion maxima: "+str(poblacionMaxima)+"/ individuos: "+str(individuos))
 
         self.podaProbabilidad.setText(str(pp))
 
@@ -366,18 +370,56 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 print( str(index) , str(listaPodado[index]))
             else:
                 print("fuera de limite")
-
         
+        self.calcularCoordenadas(listaPodado)
 
-
-        print("\n Menor a mayor:")
+        """ print("\n Menor a mayor:")
         listaPodado = sorted(listaPodado, key=lambda individuo: individuo[3], reverse=False)
         for index in listaPodado:            
-            print( str(index)) 
+            print( str(index)) """
+                
+
+    def calcularCoordenadas(self, listaPodado):
+        print("Calculando")
+
+        for i in range(len(listaPodado)):            
+            listaPodado[i][2] = int( str(listaPodado[i][1]) , 2)
+        
+        print("\nCompuesto bit num")
+        xI = []
+        fX = []
+
+        rangoInicio = int(self.rangoInicioText.text())
+        presicion = float(self.precisionText.text())
+        funcion = self.FuncionText.text()
+
+        #sin ='math.sin'
+        for i in listaPodado:
+            print(str(i)) #pos [2]
+
+            xiFun = float( rangoInicio + (float(i[2]) * presicion) )            
+            print( str(rangoInicio) +" - "+ str( i[2] ) + " - " + str(presicion))
+            print("res: "+ str(xiFun) )
+            xI.append( xiFun )
+
+            x = xiFun            
+            #fxFun = float( xiFun**2*math.sin(xiFun) )
+            fxFun = eval(funcion)
+
+            print( str(xiFun) +" -> "+ str(fxFun) )
+            fX.append(fxFun)
             
-
-
-        # mutar gen
+        self.graficarDatos(xI, fX)
+    
+    def graficarDatos(self, x, y):
+        print("Graficando")        
+        
+        plt.plot(x,y, label='linear')
+        #plt.plot(x,y2, label='quadratic')
+        
+        plt.legend()
+        plt.show()
+            
     
     def mutarGen(self, hijosMutar):
         print("Mutar Gen: ")
@@ -409,14 +451,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         
         return hijosMutar
 
-
-            
-        
-
-
-        
-
-            
 
 if __name__ == "__main__":
     app =  QtWidgets.QApplication(sys.argv)
