@@ -6,7 +6,7 @@ import sys
 #Importar aquí las librerías a utilizar
 import matplotlib.pyplot as plt
 import random
-import math
+from math import sin, cos, tan
 
 from PyQt5 import uic, QtWidgets
 
@@ -403,7 +403,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             xI.append( xiFun )
 
             x = xiFun            
-            #fxFun = float( xiFun**2*math.sin(xiFun) )
+            #fxFun = float( x**2*sin(x) )
             fxFun = eval(funcion)
 
             print( str(xiFun) +" -> "+ str(fxFun) )
