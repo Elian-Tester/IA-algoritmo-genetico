@@ -388,6 +388,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         print("\nCompuesto bit num")
         xI = []
         fX = []
+        coordenadasOrdenado = []
 
         rangoInicio = int(self.rangoInicioText.text())
         presicion = float(self.precisionText.text())
@@ -400,14 +401,22 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             xiFun = float( rangoInicio + (float(i[2]) * presicion) )            
             print( str(rangoInicio) +" - "+ str( i[2] ) + " - " + str(presicion))
             print("res: "+ str(xiFun) )
-            xI.append( xiFun )
+            #xI.append( xiFun )
 
-            x = xiFun            
-            #fxFun = float( x**2*sin(x) )
+            x = xiFun #se usa dentro de eval como expresion regular
             fxFun = eval(funcion)
-
             print( str(xiFun) +" -> "+ str(fxFun) )
-            fX.append(fxFun)
+            #fX.append(fxFun)
+            
+            coordenadasOrdenado.append( [xiFun, fxFun] )
+        
+        coordenadasOrdenado = sorted(coordenadasOrdenado, key=lambda xCoord: xCoord[0], reverse=False) # menor -mayor en x
+
+        print("\nCoordenadas para graficar")
+        for coor in coordenadasOrdenado:
+            print(str(coor))
+            xI.append(coor[0])
+            fX.append(coor[1])
             
         self.graficarDatos(xI, fX)
     
