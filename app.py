@@ -45,6 +45,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.decendenciaText.setText("0.001")
         self.mutacionIndividuoText.setText("0.25")
         self.mutacionGenText.setText("0.40")
+        self.FuncionText.setText("x**2*sin(x)")
 
     def getTexto(self):
         print("enviar")        
@@ -288,19 +289,28 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         """ print("\n Paddres: ")
         for padresEhijos in arrayBits:
             print(str(padresEhijos)) """
-
+        
+        print("\nHijos y padres juentos:")
         poblacionMaxima = self.poblacionMaximaText.text()
-        if len(arrayBits) > int(poblacionMaxima) :
-            print("debe ver poda: padre> "+ str(len(arrayBits)))
-            """ print("pob max: "+poblacionMaxima) """
-            
-            self.Poda(arrayBits)
-        else:            
-            print("No ocupa poda: padre>"+ str(len(arrayBits)))
-            """ print("pob max: "+poblacionMaxima) """
+
+        self.calcularCoordenadas(arrayBits)
+        podaSelect = self.usarPodacheck.isChecked()
+        print( "checked is: "+str(podaSelect) )
+        if podaSelect:
+            if len(arrayBits) > int(poblacionMaxima) :
+                print("debe ver poda: padre> "+ str(len(arrayBits)))
+                """ print("pob max: "+poblacionMaxima) """
+                
+                self.Poda(arrayBits)
+            else:            
+                print("No ocupa poda: padre>"+ str(len(arrayBits)))
+                self.calcularCoordenadas(arrayBits)
             
     def Poda(self, arrayBits):
-        print("\nInicia poda")        
+        print("\nInicia poda")
+        
+        for index in arrayBits:            
+            print( str(index))
 
         """ agregando probabilidad de poda """
         for index in range( len(arrayBits) ):
@@ -316,10 +326,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.podaProbabilidad.setText(str(pp))
 
-        print("\n+ probabilidad:")
-        
-        """ for index in arrayBits:            
-            print( str(index))  """
+        #print("\n+ probabilidad:")        
 
         print("\nborrando mayores a poda:")
 
@@ -328,27 +335,39 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             if index[3] <= pp:
                 """ print( str(index)) """
                 listaPodado.append(index)
-        
-        """  print("\npodado:")
-        for index in listaPodado:            
-            print( str(index))  """
 
-        print("\n Mayor a menor:")
-        listaPodado = sorted(listaPodado, key=lambda individuo: individuo[3], reverse=True)
-        # poblacionMaxima
-        for index in range(len(listaPodado)):        
+
+        if self.maximoRadio.isChecked():
+            print("\n Mayor a menor:")
+            listaPodado = sorted(listaPodado, key=lambda individuo: individuo[3], reverse=True)
+            listaPodTempMax = []
+            for index in range(len(listaPodado)):        
+                
+                if index < poblacionMaxima:
+                    print( str(index) , str(listaPodado[index]))
+                    listaPodTempMax.append(listaPodado[index])
+                else:
+                    print("fuera de limite de poblacion")
             
-            if index < poblacionMaxima:
-                print( str(index) , str(listaPodado[index]))
-            else:
-                print("fuera de limite de poblacion")
-        
-        self.calcularCoordenadas(listaPodado)
+            self.calcularCoordenadas(listaPodTempMax)
+        else:
+            print("No ha seleccionado minimo")
 
-        """ print("\n Menor a mayor:")
-        listaPodado = sorted(listaPodado, key=lambda individuo: individuo[3], reverse=False)
-        for index in listaPodado:            
-            print( str(index)) """
+        
+        if self.minimoRadio.isChecked() :
+            print("\n Menor a mayor:")
+            listaPodado = sorted(listaPodado, key=lambda individuo: individuo[3], reverse=False)
+            listaPodTempMin = []
+            for index in range(len(listaPodado)):            
+                if index < poblacionMaxima:
+                    print( str(index) , str(listaPodado[index]))
+                    listaPodTempMin.append(listaPodado[index])
+                else:
+                    print("fuera de limite de poblacion")
+            
+            self.calcularCoordenadas(listaPodTempMin)
+        else:
+            print("No ha seleccionado maximo")
                 
 
     def calcularCoordenadas(self, listaPodado):
@@ -366,16 +385,11 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         presicion = float(self.precisionText.text())
         funcion = self.FuncionText.text()
 
-        for i in listaPodado:
-            """ print(str(i)) """ #pos [2]
-
+        for i in listaPodado:            
             xiFun = float( rangoInicio + (float(i[2]) * presicion) )            
-            """ print( str(rangoInicio) +" - "+ str( i[2] ) + " - " + str(presicion)) """
-            """ print("res: "+ str(xiFun) ) """
-            
+
             x = xiFun #se usa dentro de eval como expresion regular
             fxFun = eval(funcion)
-            """ print( str(xiFun) +" -> "+ str(fxFun) ) """
             
             coordenadasOrdenado.append( [xiFun, fxFun] )
         
@@ -391,7 +405,8 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     
     def graficarDatos(self, x, y):
         print("Graficando")            
-        plt.plot(x,y, label='Maximos')        
+        #plt.plot(x,y, label='Maximos')        
+        plt.scatter(x,y, label='Maximos')        
         plt.legend()
         plt.show()
             

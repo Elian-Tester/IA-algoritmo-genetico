@@ -238,7 +238,7 @@ background-color: rgb(73, 208, 168);</string>
      <string>Poblacion maxima</string>
     </property>
    </widget>
-   <widget class="QRadioButton" name="radioButton">
+   <widget class="QRadioButton" name="minimoRadio">
     <property name="geometry">
      <rect>
       <x>570</x>
@@ -251,7 +251,7 @@ background-color: rgb(73, 208, 168);</string>
      <string>minimo</string>
     </property>
    </widget>
-   <widget class="QRadioButton" name="radioButton_2">
+   <widget class="QRadioButton" name="maximoRadio">
     <property name="geometry">
      <rect>
       <x>690</x>
@@ -453,6 +453,19 @@ background-color: rgb(73, 208, 168);</string>
     </property>
     <property name="text">
      <string/>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="usarPodacheck">
+    <property name="geometry">
+     <rect>
+      <x>1000</x>
+      <y>340</y>
+      <width>81</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Usar poda</string>
     </property>
    </widget>
   </widget>
