@@ -12,9 +12,11 @@ from PyQt5 import uic, QtWidgets
 
 qtCreatorFile = "vista.ui" #Aquí va el nombre de tu archivo
 
+
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 
 class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
+    ID_IMAGES=0
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
@@ -408,6 +410,10 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         #plt.plot(x,y, label='Maximos')        
         plt.scatter(x,y, label='Maximos')        
         plt.legend()
+
+        plt.savefig("graficas/Grafica-"+ str( self.ID_IMAGES ) + ".png")
+        self.ID_IMAGES+=1
+
         plt.show()
             
     
