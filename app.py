@@ -17,6 +17,10 @@ Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 
 class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     ID_IMAGES=0
+    MEJORES_GENERACION = []
+    PEORES_GENERACION = []
+    PROMEDIO_GENERACIONES = []
+    ITERACION_GENERACION = 1
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
@@ -25,7 +29,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.boton1.clicked.connect(self.setPlot)
         self.boton2.clicked.connect(self.setTexto)
         self.enviar.clicked.connect(self.getTexto)
-        self.CalcularBoton.clicked.connect(self.Calcular)
+        self.CalcularBoton.clicked.connect(self.generaciones)
 
 
     def setPlot(self):
@@ -40,19 +44,28 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def setTexto(self):
         print("texto en caja")        
         self.poblacionInicialText.setText("6")
-        self.precisionText.setText("0.1")
-        self.rangoInicioText.setText("3")
-        self.rangoFinText.setText("8")
+        self.precisionText.setText("0.001")
+        self.rangoInicioText.setText("-4")
+        self.rangoFinText.setText("4")
         self.poblacionMaximaText.setText("8")
         self.decendenciaText.setText("0.001")
         self.mutacionIndividuoText.setText("0.25")
         self.mutacionGenText.setText("0.40")
-        self.FuncionText.setText("x**2*sin(x)")
+        #self.FuncionText.setText("x**2*sin(x)")
+        self.FuncionText.setText("0.75*cos(1.50*x)*sin(1.50*x)-0.25*cos(0.25*x) ")
+        
 
     def getTexto(self):
         print("enviar")        
         textoValor = self.texto.toPlainText()
         print(textoValor)
+
+    def generaciones(self):
+        print("Generaciones")
+        generaciones = int(self.numGeneracionText.text())
+        for num in range(generaciones):
+            print("\nGeneracion: "+ str( num ))
+            self.Calcular()
 
     def Calcular(self):
         print("Calculando")        
@@ -297,6 +310,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.calcularCoordenadas(arrayBits)
         podaSelect = self.usarPodacheck.isChecked()
+        
         print( "checked is: "+str(podaSelect) )
         if podaSelect:
             if len(arrayBits) > int(poblacionMaxima) :
@@ -372,43 +386,126 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             print("No ha seleccionado maximo")
                 
 
-    def calcularCoordenadas(self, listaPodado):
+    def calcularCoordenadas(self, listaIndividuos):
         print("Calculando")
 
-        for i in range(len(listaPodado)):            
-            listaPodado[i][2] = int( str(listaPodado[i][1]) , 2)
+        for i in range(len(listaIndividuos)):            
+            listaIndividuos[i][2] = int( str(listaIndividuos[i][1]) , 2)
         
         """ print("\nCompuesto bit num") """
-        xI = []
-        fX = []
+        xImax = []
+        fXmax = []
+        
+        xImin = []
+        fXmin = []
+
+        fXprom = []
+        xIprom = []
         coordenadasOrdenado = []
 
         rangoInicio = int(self.rangoInicioText.text())
         presicion = float(self.precisionText.text())
         funcion = self.FuncionText.text()
+        
+        #self.MEJORES_GENERACION.append([])
 
-        for i in listaPodado:            
+        for i in listaIndividuos:    
+            print(str(i))        
             xiFun = float( rangoInicio + (float(i[2]) * presicion) )            
 
             x = xiFun #se usa dentro de eval como expresion regular
             fxFun = eval(funcion)
             
             coordenadasOrdenado.append( [xiFun, fxFun] )
-        
-        coordenadasOrdenado = sorted(coordenadasOrdenado, key=lambda xCoord: xCoord[0], reverse=False) # menor -mayor en x
 
-        print("\nCoordenadas para graficar")
+        print("\nLIsta con coordenandas antes de max y min")
+        for datoCor in coordenadasOrdenado:
+            print( str(datoCor) )
+
+        listaIndividuos = sorted(coordenadasOrdenado, key=lambda individuo: individuo[1], reverse=True)
+
+        for datoCor in listaIndividuos:
+            print( str(datoCor) )
+
+        print("\nLlista generacion 1")
+        print( "maximo"+ str(listaIndividuos[0]) )
+        print( "minimo"+ str(listaIndividuos[ len(listaIndividuos)-1 ]) )
+        
+        maximoCoord = float(listaIndividuos[0][1])
+        minimoCoord = float( listaIndividuos[ len(listaIndividuos)-1 ][1] )
+
+        #xiFun = float( rangoInicio + (float( maximoCoord ) * presicion) )
+        xiFun = maximoCoord
+        x = xiFun #se usa dentro de eval como expresion regular
+        fxFun = eval(funcion)
+        
+        #self.MEJORES_GENERACION.append([xiFun, fxFun])
+        self.MEJORES_GENERACION.append([self.ITERACION_GENERACION, fxFun])        
+
+        #xiFun = float( rangoInicio + (float( minimoCoord ) * presicion) )
+        xiFun = minimoCoord
+        x = xiFun #se usa dentro de eval como expresion regular
+        fxFun = eval(funcion)
+        #self.PEORES_GENERACION.append([xiFun, fxFun])
+        self.PEORES_GENERACION.append([self.ITERACION_GENERACION, fxFun])
+        
+        #coordenadasOrdenado = sorted(coordenadasOrdenado, key=lambda xCoord: xCoord[0], reverse=False) # menor -mayor en x
+
+        """ print("\nCoordenadas para graficar")
         for coor in coordenadasOrdenado:
             print(str(coor))
             xI.append(coor[0])
-            fX.append(coor[1])
+            fX.append(coor[1]) """
+        
+        if int(self.ITERACION_GENERACION) == int(self.numGeneracionText.text()) : #int( self.numGeneracionText()
+            print("\nCoordenadas para graficar")
+            for coor in self.MEJORES_GENERACION:
+                print(str(coor))
+                xImax.append(coor[0])
+                fXmax.append(coor[1])            
+
+            for coor in self.PEORES_GENERACION :
+                print(str(coor))
+                xImin.append(coor[0])
+                fXmin.append(coor[1])
+
+            for coor in range( len( self.MEJORES_GENERACION) ):
+                promedio = (float(self.MEJORES_GENERACION[coor][1]) + float(self.PEORES_GENERACION[coor][1])) / 2
+                xIprom.append( self.MEJORES_GENERACION[coor][0] )
+                fXprom.append(promedio)
             
-        self.graficarDatos(xI, fX)
+            print("\nAntes de graficar")
+            for coor in self.MEJORES_GENERACION:
+                print(str(coor))
+            #self.ITERACION_GENERACION = 0    
+            
+            self.graficarDatos(xImax, fXmax, xImin, fXmin, xIprom, fXprom)
+            #self.graficarDatos(xImin, fXmin)
+            self.ITERACION_GENERACION = 1
+
+        else:
+            print("menor a iteracion")
+            self.ITERACION_GENERACION +=1
     
-    def graficarDatos(self, x, y):
+    def graficarDatos(self, xMax, yMax, xMin, yMin, xProm, yProm):
         print("Graficando")            
-        #plt.plot(x,y, label='Maximos')        
-        plt.scatter(x,y, label='Maximos')        
+
+        fig= plt.figure(figsize=(10,5))
+        fig.tight_layout()
+        plt.subplot(1, 1, 1)
+        plt.plot(xMax,yMax, label='Maximos')
+        plt.plot(xMin,yMin, label='Minimos')
+        plt.plot(xProm,yProm, label='Promedio')
+
+        self.MEJORES_GENERACION.clear()
+        self.PEORES_GENERACION.clear()
+        self.PROMEDIO_GENERACIONES.clear()
+        
+        # plt.plot(xMax,yMax, label='Maximos')
+        # plt.plot(xMin,yMin, label='Minimos')
+        # plt.plot(xProm,yProm, label='Promedio')
+        
+        #plt.scatter(x,y, label='Maximos')        
         plt.legend()
 
         plt.savefig("graficas/Grafica-"+ str( self.ID_IMAGES ) + ".png")

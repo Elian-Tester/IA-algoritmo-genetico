@@ -20,8 +20,8 @@
    <widget class="QPushButton" name="boton1">
     <property name="geometry">
      <rect>
-      <x>350</x>
-      <y>280</y>
+      <x>346</x>
+      <y>320</y>
       <width>93</width>
       <height>28</height>
      </rect>
@@ -36,8 +36,8 @@
    <widget class="QPushButton" name="boton2">
     <property name="geometry">
      <rect>
-      <x>150</x>
-      <y>280</y>
+      <x>146</x>
+      <y>320</y>
       <width>93</width>
       <height>28</height>
      </rect>
@@ -52,8 +52,8 @@
    <widget class="QPushButton" name="enviar">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>280</y>
+      <x>476</x>
+      <y>320</y>
       <width>93</width>
       <height>28</height>
      </rect>
@@ -69,8 +69,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>30</y>
+      <x>56</x>
+      <y>70</y>
       <width>55</width>
       <height>16</height>
      </rect>
@@ -82,8 +82,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>80</y>
+      <x>56</x>
+      <y>120</y>
       <width>101</width>
       <height>16</height>
      </rect>
@@ -95,8 +95,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>130</y>
+      <x>56</x>
+      <y>170</y>
       <width>71</width>
       <height>16</height>
      </rect>
@@ -108,8 +108,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>190</y>
+      <x>56</x>
+      <y>230</y>
       <width>151</width>
       <height>16</height>
      </rect>
@@ -121,8 +121,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>230</y>
+      <x>126</x>
+      <y>270</y>
       <width>55</width>
       <height>16</height>
      </rect>
@@ -134,8 +134,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QPushButton" name="CalcularBoton">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>280</y>
+      <x>26</x>
+      <y>320</y>
       <width>93</width>
       <height>28</height>
      </rect>
@@ -150,8 +150,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QLineEdit" name="poblacionInicialText">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>80</y>
+      <x>206</x>
+      <y>120</y>
       <width>191</width>
       <height>22</height>
      </rect>
@@ -160,8 +160,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QLineEdit" name="precisionText">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>130</y>
+      <x>206</x>
+      <y>170</y>
       <width>201</width>
       <height>22</height>
      </rect>
@@ -170,8 +170,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QLabel" name="CantidadSolucionesLabel">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>190</y>
+      <x>216</x>
+      <y>230</y>
       <width>41</width>
       <height>16</height>
      </rect>
@@ -186,8 +186,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QLabel" name="numBitsLabel">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>230</y>
+      <x>216</x>
+      <y>270</y>
       <width>41</width>
       <height>16</height>
      </rect>
@@ -202,8 +202,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QLabel" name="label_8">
     <property name="geometry">
      <rect>
-      <x>530</x>
-      <y>40</y>
+      <x>526</x>
+      <y>80</y>
       <width>55</width>
       <height>16</height>
      </rect>
@@ -215,8 +215,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QLabel" name="label_9">
     <property name="geometry">
      <rect>
-      <x>700</x>
-      <y>40</y>
+      <x>696</x>
+      <y>80</y>
       <width>55</width>
       <height>16</height>
      </rect>
@@ -228,8 +228,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QLabel" name="label_10">
     <property name="geometry">
      <rect>
-      <x>530</x>
-      <y>90</y>
+      <x>526</x>
+      <y>130</y>
       <width>111</width>
       <height>16</height>
      </rect>
@@ -241,8 +241,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QRadioButton" name="minimoRadio">
     <property name="geometry">
      <rect>
-      <x>570</x>
-      <y>160</y>
+      <x>566</x>
+      <y>200</y>
       <width>95</width>
       <height>20</height>
      </rect>
@@ -254,8 +254,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QRadioButton" name="maximoRadio">
     <property name="geometry">
      <rect>
-      <x>690</x>
-      <y>160</y>
+      <x>686</x>
+      <y>200</y>
       <width>95</width>
       <height>20</height>
      </rect>
@@ -267,8 +267,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QLineEdit" name="rangoInicioText">
     <property name="geometry">
      <rect>
-      <x>570</x>
-      <y>40</y>
+      <x>566</x>
+      <y>80</y>
       <width>81</width>
       <height>22</height>
      </rect>
@@ -277,8 +277,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QLineEdit" name="rangoFinText">
     <property name="geometry">
      <rect>
-      <x>740</x>
-      <y>40</y>
+      <x>736</x>
+      <y>80</y>
       <width>81</width>
       <height>22</height>
      </rect>
@@ -287,8 +287,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QLineEdit" name="poblacionMaximaText">
     <property name="geometry">
      <rect>
-      <x>660</x>
-      <y>90</y>
+      <x>656</x>
+      <y>130</y>
       <width>101</width>
       <height>22</height>
      </rect>
@@ -297,8 +297,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QLineEdit" name="FuncionText">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>30</y>
+      <x>206</x>
+      <y>70</y>
       <width>181</width>
       <height>22</height>
      </rect>
@@ -307,8 +307,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QLabel" name="label_11">
     <property name="geometry">
      <rect>
-      <x>970</x>
-      <y>50</y>
+      <x>966</x>
+      <y>90</y>
       <width>81</width>
       <height>16</height>
      </rect>
@@ -320,8 +320,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QLabel" name="label_12">
     <property name="geometry">
      <rect>
-      <x>940</x>
-      <y>90</y>
+      <x>936</x>
+      <y>130</y>
       <width>111</width>
       <height>16</height>
      </rect>
@@ -333,8 +333,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QLabel" name="label_13">
     <property name="geometry">
      <rect>
-      <x>970</x>
-      <y>130</y>
+      <x>966</x>
+      <y>170</y>
       <width>111</width>
       <height>16</height>
      </rect>
@@ -346,8 +346,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QLabel" name="label_14">
     <property name="geometry">
      <rect>
-      <x>740</x>
-      <y>230</y>
+      <x>736</x>
+      <y>270</y>
       <width>51</width>
       <height>16</height>
      </rect>
@@ -359,8 +359,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QLabel" name="label_15">
     <property name="geometry">
      <rect>
-      <x>1100</x>
-      <y>20</y>
+      <x>1096</x>
+      <y>60</y>
       <width>41</width>
       <height>21</height>
      </rect>
@@ -379,8 +379,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QLineEdit" name="decendenciaText">
     <property name="geometry">
      <rect>
-      <x>1060</x>
-      <y>50</y>
+      <x>1056</x>
+      <y>90</y>
       <width>113</width>
       <height>22</height>
      </rect>
@@ -389,8 +389,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QLineEdit" name="mutacionIndividuoText">
     <property name="geometry">
      <rect>
-      <x>1060</x>
-      <y>90</y>
+      <x>1056</x>
+      <y>130</y>
       <width>113</width>
       <height>22</height>
      </rect>
@@ -399,8 +399,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QLineEdit" name="mutacionGenText">
     <property name="geometry">
      <rect>
-      <x>1060</x>
-      <y>130</y>
+      <x>1056</x>
+      <y>170</y>
       <width>113</width>
       <height>22</height>
      </rect>
@@ -409,8 +409,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QLineEdit" name="podaProbabilidad">
     <property name="geometry">
      <rect>
-      <x>820</x>
-      <y>230</y>
+      <x>816</x>
+      <y>270</y>
       <width>321</width>
       <height>22</height>
      </rect>
@@ -419,8 +419,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QLabel" name="label_6">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>350</y>
+      <x>26</x>
+      <y>390</y>
       <width>121</width>
       <height>16</height>
      </rect>
@@ -432,8 +432,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QTextBrowser" name="binariosGeneradosLabel">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>410</y>
+      <x>26</x>
+      <y>450</y>
       <width>301</width>
       <height>291</height>
      </rect>
@@ -445,8 +445,8 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QLabel" name="infoPodaLabel">
     <property name="geometry">
      <rect>
-      <x>820</x>
-      <y>280</y>
+      <x>816</x>
+      <y>320</y>
       <width>321</width>
       <height>16</height>
      </rect>
@@ -458,14 +458,37 @@ background-color: rgb(73, 208, 168);</string>
    <widget class="QCheckBox" name="usarPodacheck">
     <property name="geometry">
      <rect>
-      <x>1000</x>
-      <y>340</y>
+      <x>996</x>
+      <y>380</y>
       <width>81</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
      <string>Usar poda</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="numGeneracionText">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>30</y>
+      <width>113</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>30</y>
+      <width>121</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Num. Generaciones:</string>
     </property>
    </widget>
   </widget>
