@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from ast import arg
 import sys
+from turtle import color
 
 #Importar aquí las librerías a utilizar
 import matplotlib.pyplot as plt
@@ -308,7 +309,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         print("\nHijos y padres juentos:")
         poblacionMaxima = self.poblacionMaximaText.text()
 
-        self.calcularCoordenadas(arrayBits)
+        self.calcularCoordenadas(arrayBits, "historico")
         podaSelect = self.usarPodacheck.isChecked()
         
         print( "checked is: "+str(podaSelect) )
@@ -320,7 +321,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.Poda(arrayBits)
             else:            
                 print("No ocupa poda: padre>"+ str(len(arrayBits)))
-                self.calcularCoordenadas(arrayBits)
+                self.calcularCoordenadas(arrayBits, "sin poda")
             
     def Poda(self, arrayBits):
         print("\nInicia poda")
@@ -349,58 +350,35 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         listaPodado = []
         for index in arrayBits:
             if index[3] <= pp:
-                """ print( str(index)) """
+                print( str(index))
                 listaPodado.append(index)
 
 
         if self.maximoRadio.isChecked():
-            print("\n Mayor a menor:")
-            listaPodado = sorted(listaPodado, key=lambda individuo: individuo[3], reverse=True)
-            listaPodTempMax = []
-            for index in range(len(listaPodado)):        
-                
-                if index < poblacionMaxima:
-                    print( str(index) , str(listaPodado[index]))
-                    listaPodTempMax.append(listaPodado[index])
-                else:
-                    print("fuera de limite de poblacion")
-            
-            self.calcularCoordenadas(listaPodTempMax)
+            print("\n Mayor a menor:")                        
+            self.calcularCoordenadas(listaPodado, "podaMax")
+
         else:
-            print("No ha seleccionado minimo")
+            print("No ha seleccionado maximo")
 
         
         if self.minimoRadio.isChecked() :
-            print("\n Menor a mayor:")
-            listaPodado = sorted(listaPodado, key=lambda individuo: individuo[3], reverse=False)
-            listaPodTempMin = []
-            for index in range(len(listaPodado)):            
-                if index < poblacionMaxima:
-                    print( str(index) , str(listaPodado[index]))
-                    listaPodTempMin.append(listaPodado[index])
-                else:
-                    print("fuera de limite de poblacion")
-            
-            self.calcularCoordenadas(listaPodTempMin)
+            print("\n Menor a mayor:")            
+            self.calcularCoordenadas(listaPodado, "podaMin")
         else:
-            print("No ha seleccionado maximo")
+            print("No ha seleccionado minimo")
                 
 
-    def calcularCoordenadas(self, listaIndividuos):
+    def calcularCoordenadas(self, listaIndividuos, tipoGrafico):
         print("Calculando")
+        #limpia - poda
 
-        for i in range(len(listaIndividuos)):            
+        # agregando valor del binario (ambos)
+        for i in range(len(listaIndividuos)):
             listaIndividuos[i][2] = int( str(listaIndividuos[i][1]) , 2)
         
         """ print("\nCompuesto bit num") """
-        xImax = []
-        fXmax = []
-        
-        xImin = []
-        fXmin = []
 
-        fXprom = []
-        xIprom = []
         coordenadasOrdenado = []
 
         rangoInicio = int(self.rangoInicioText.text())
@@ -427,91 +405,152 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         for datoCor in listaIndividuos:
             print( str(datoCor) )
 
-        print("\nLlista generacion 1")
-        print( "maximo"+ str(listaIndividuos[0]) )
-        print( "minimo"+ str(listaIndividuos[ len(listaIndividuos)-1 ]) )
-        
-        maximoCoord = float(listaIndividuos[0][1])
-        minimoCoord = float( listaIndividuos[ len(listaIndividuos)-1 ][1] )
+        if tipoGrafico == "historico":
+            """ Limpio - historico"""
 
-        #xiFun = float( rangoInicio + (float( maximoCoord ) * presicion) )
-        xiFun = maximoCoord
-        x = xiFun #se usa dentro de eval como expresion regular
-        fxFun = eval(funcion)
-        
-        #self.MEJORES_GENERACION.append([xiFun, fxFun])
-        self.MEJORES_GENERACION.append([self.ITERACION_GENERACION, fxFun])        
-
-        #xiFun = float( rangoInicio + (float( minimoCoord ) * presicion) )
-        xiFun = minimoCoord
-        x = xiFun #se usa dentro de eval como expresion regular
-        fxFun = eval(funcion)
-        #self.PEORES_GENERACION.append([xiFun, fxFun])
-        self.PEORES_GENERACION.append([self.ITERACION_GENERACION, fxFun])
-        
-        #coordenadasOrdenado = sorted(coordenadasOrdenado, key=lambda xCoord: xCoord[0], reverse=False) # menor -mayor en x
-
-        """ print("\nCoordenadas para graficar")
-        for coor in coordenadasOrdenado:
-            print(str(coor))
-            xI.append(coor[0])
-            fX.append(coor[1]) """
-        
-        if int(self.ITERACION_GENERACION) == int(self.numGeneracionText.text()) : #int( self.numGeneracionText()
-            print("\nCoordenadas para graficar")
-            for coor in self.MEJORES_GENERACION:
-                print(str(coor))
-                xImax.append(coor[0])
-                fXmax.append(coor[1])            
-
-            for coor in self.PEORES_GENERACION :
-                print(str(coor))
-                xImin.append(coor[0])
-                fXmin.append(coor[1])
-
-            for coor in range( len( self.MEJORES_GENERACION) ):
-                promedio = (float(self.MEJORES_GENERACION[coor][1]) + float(self.PEORES_GENERACION[coor][1])) / 2
-                xIprom.append( self.MEJORES_GENERACION[coor][0] )
-                fXprom.append(promedio)
+            print("\nLista generacion 1")
+            print( "maximo"+ str(listaIndividuos[0]) )
+            print( "minimo"+ str(listaIndividuos[ len(listaIndividuos)-1 ]) )
             
-            print("\nAntes de graficar")
-            for coor in self.MEJORES_GENERACION:
-                print(str(coor))
-            #self.ITERACION_GENERACION = 0    
-            
-            self.graficarDatos(xImax, fXmax, xImin, fXmin, xIprom, fXprom)
-            #self.graficarDatos(xImin, fXmin)
-            self.ITERACION_GENERACION = 1
+            maximoCoord = float(listaIndividuos[0][1])
+            minimoCoord = float( listaIndividuos[ len(listaIndividuos)-1 ][1] )
 
-        else:
-            print("menor a iteracion")
-            self.ITERACION_GENERACION +=1
+            #xiFun = float( rangoInicio + (float( maximoCoord ) * presicion) )
+            xiFun = maximoCoord
+            x = xiFun #se usa dentro de eval como expresion regular
+            fxFun = eval(funcion)
+            
+            #self.MEJORES_GENERACION.append([xiFun, fxFun])
+            self.MEJORES_GENERACION.append([self.ITERACION_GENERACION, fxFun])        
+
+            #xiFun = float( rangoInicio + (float( minimoCoord ) * presicion) )
+            xiFun = minimoCoord
+            x = xiFun #se usa dentro de eval como expresion regular
+            fxFun = eval(funcion)
+            #self.PEORES_GENERACION.append([xiFun, fxFun])
+            self.PEORES_GENERACION.append([self.ITERACION_GENERACION, fxFun])
+            
+            #coordenadasOrdenado = sorted(coordenadasOrdenado, key=lambda xCoord: xCoord[0], reverse=False) # menor -mayor en x
+
+            """ print("\nCoordenadas para graficar")
+            for coor in coordenadasOrdenado:
+                print(str(coor))
+                xI.append(coor[0])
+                fX.append(coor[1]) """
+            xImax = []
+            fXmax = []
+            
+            xImin = []
+            fXmin = []
+
+            fXprom = []
+            xIprom = []
+
+            if int(self.ITERACION_GENERACION) == int(self.numGeneracionText.text()) : #int( self.numGeneracionText()
+                print("\nCoordenadas para graficar")
+                for coor in self.MEJORES_GENERACION:
+                    print(str(coor))
+                    xImax.append(coor[0])
+                    fXmax.append(coor[1])            
+
+                for coor in self.PEORES_GENERACION :
+                    print(str(coor))
+                    xImin.append(coor[0])
+                    fXmin.append(coor[1])
+
+                for coor in range( len( self.MEJORES_GENERACION) ):
+                    promedio = (float(self.MEJORES_GENERACION[coor][1]) + float(self.PEORES_GENERACION[coor][1])) / 2
+                    xIprom.append( self.MEJORES_GENERACION[coor][0] )
+                    fXprom.append(promedio)
+                
+                print("\nAntes de graficar")
+                for coor in self.MEJORES_GENERACION:
+                    print(str(coor))
+                #self.ITERACION_GENERACION = 0    
+                
+                self.graficarDatos(xImax, fXmax, xImin, fXmin, xIprom, fXprom, [], [])
+                #self.graficarDatos(xImin, fXmin)
+                self.ITERACION_GENERACION = 1
+
+            else:
+                print("menor a iteracion")
+                self.ITERACION_GENERACION +=1
+            """ Fin historico """
+        if (tipoGrafico == "podaMax" or tipoGrafico == "podaMin"):
+            print("Poda")
+            if tipoGrafico == "podaMax":
+                listaIndividuos = sorted(listaIndividuos, key=lambda individuo: individuo[1], reverse=True)
+                print("\nPoda de maximos")
+                for maximo in listaIndividuos:
+                    print( str(maximo) )
+            if tipoGrafico == "podaMin":
+                print("\nPoda de minimos")
+                for maximo in listaIndividuos:
+                    print( str(maximo) )
+
+                listaIndividuos = sorted(listaIndividuos, key=lambda individuo: individuo[1], reverse=False)
+
+            listaPodTempMax = []
+            xPoda = []
+            yPoda = []
+
+            for index in range(len(listaIndividuos)):        
+                
+                if index < int(self.poblacionMaximaText.text()):
+
+                    print( str(index) , str(listaIndividuos[index]))
+                    listaPodTempMax.append(listaIndividuos[index])
+                    xPoda.append(listaIndividuos[index][0])
+                    yPoda.append(listaIndividuos[index][1])
+                else:
+                    print("fuera de limite de poblacion")
+
+            print(" \nlista temporal de poda:")
+            for x in listaPodTempMax:
+                print( str(x) )
+
+            self.graficarDatos([], [], [], [], [], [], xPoda, yPoda)
+        
+        if tipoGrafico == "sin poda":
+            print("Sin poda")
     
-    def graficarDatos(self, xMax, yMax, xMin, yMin, xProm, yProm):
+    def graficarDatos(self, xMax, yMax, xMin, yMin, xProm, yProm, xPoda, yPoda):
         print("Graficando")            
-
-        fig= plt.figure(figsize=(10,5))
-        fig.tight_layout()
-        plt.subplot(1, 1, 1)
-        plt.plot(xMax,yMax, label='Maximos')
-        plt.plot(xMin,yMin, label='Minimos')
-        plt.plot(xProm,yProm, label='Promedio')
-
-        self.MEJORES_GENERACION.clear()
-        self.PEORES_GENERACION.clear()
-        self.PROMEDIO_GENERACIONES.clear()
         
-        # plt.plot(xMax,yMax, label='Maximos')
-        # plt.plot(xMin,yMin, label='Minimos')
-        # plt.plot(xProm,yProm, label='Promedio')
+
+        if( len(xMax)>=1 ):
+            plt.figure(figsize=(10,5))
+            #fig.tight_layout()
+            plt.subplot(1, 1, 1)
+            plt.plot(xMax,yMax, label='Maximos')
+            plt.plot(xMin,yMin, label='Minimos')
+            plt.plot(xProm,yProm, label='Promedio')
+
+            plt.legend()        
+            #self.ID_IMAGES+=1
+            plt.show()
+
+            #plt.savefig("graficas/Grafica-"+ str( self.ID_IMAGES ) + ".png")
+            #self.ID_IMAGES-=1
+
+            self.MEJORES_GENERACION.clear()
+            self.PEORES_GENERACION.clear()
+            self.PROMEDIO_GENERACIONES.clear()
+            self.ID_IMAGES = 0
+
         
-        #plt.scatter(x,y, label='Maximos')        
-        plt.legend()
+        else:        
+            fig= plt.figure(figsize=(10,5))
+            #fig.tight_layout()
+            plt.subplot(1, 1, 1)
+            plt.scatter(xPoda,yPoda, label='Poda')
 
-        plt.savefig("graficas/Grafica-"+ str( self.ID_IMAGES ) + ".png")
-        self.ID_IMAGES+=1
-
-        plt.show()
+            plt.legend()        
+            self.ID_IMAGES+=1
+                        
+            plt.savefig("graficas/Grafica-"+ str( self.ID_IMAGES ) + ".png")
+            plt.close() 
+        
             
     
     def mutarGen(self, hijosMutar):
