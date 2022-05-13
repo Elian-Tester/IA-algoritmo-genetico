@@ -8,8 +8,10 @@ from turtle import color
 import matplotlib.pyplot as plt
 import random
 from math import sin, cos, tan
+import cv2
 
 from PyQt5 import uic, QtWidgets
+from pymysql import NULL
 
 qtCreatorFile = "vista.ui" #Aquí va el nombre de tu archivo
 
@@ -22,6 +24,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     PEORES_GENERACION = []
     PROMEDIO_GENERACIONES = []
     ITERACION_GENERACION = 1
+    BANDERA_MAX = " "
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
@@ -67,6 +70,29 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         for num in range(generaciones):
             print("\nGeneracion: "+ str( num ))
             self.Calcular()
+        
+        self.crearVideo()
+        
+    def crearVideo(self):
+        print("Creando video")
+        
+        numGeneraciones = int(self.numGeneracionText.text())
+
+        images = []
+        for index in range(1, numGeneraciones):
+            # "graficas/Grafica_Generacion-"+ str( self.ID_IMAGES ) + ".png"
+
+            path = cv2.imread('graficas/Grafica_Generacion-'+ str( index ) + '.png')  
+            images.append(path)
+
+        alto, ancho = path.shape[:2]
+        video = cv2.VideoWriter("video/video_generaciones.mp4", cv2.VideoWriter_fourcc(*"mp4v"), 2, (ancho, alto))
+
+        for img in images:
+            video.write(img)
+
+        video.release()
+
 
     def Calcular(self):
         print("Calculando")        
@@ -357,6 +383,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.maximoRadio.isChecked():
             print("\n Mayor a menor:")                        
             self.calcularCoordenadas(listaPodado, "podaMax")
+            self.BANDERA_MAX = True
 
         else:
             print("No ha seleccionado maximo")
@@ -365,6 +392,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.minimoRadio.isChecked() :
             print("\n Menor a mayor:")            
             self.calcularCoordenadas(listaPodado, "podaMin")
+            self.BANDERA_MAX = False
         else:
             print("No ha seleccionado minimo")
                 
@@ -543,12 +571,21 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             fig= plt.figure(figsize=(10,5))
             #fig.tight_layout()
             plt.subplot(1, 1, 1)
-            plt.scatter(xPoda,yPoda, label='Poda')
+            
+            plt.xlim(-5, int(self.numGeneracionText.text() ))
+            plt.ylim(-5, int(self.numGeneracionText.text() ))
+
+            plt.scatter(xPoda,yPoda, label='Poda')            
 
             plt.legend()        
             self.ID_IMAGES+=1
-                        
-            plt.savefig("graficas/Grafica-"+ str( self.ID_IMAGES ) + ".png")
+
+            if self.BANDERA_MAX == True:
+                plt.title("Generacion: "+ str(self.ID_IMAGES) +" | MAXIMO" )
+            if self.BANDERA_MAX == False:
+                plt.title("Generacion: "+ str(self.ID_IMAGES) +" | MINIMO" )
+
+            plt.savefig("graficas/Grafica_Generacion-"+ str( self.ID_IMAGES ) + ".png")
             plt.close() 
         
             
