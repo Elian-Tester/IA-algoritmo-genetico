@@ -25,6 +25,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     PROMEDIO_GENERACIONES = []
     ITERACION_GENERACION = 1
     BANDERA_MAX = " "
+    BANDERA_FIN_HISTORICO = False
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
@@ -32,7 +33,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.boton1.clicked.connect(self.setPlot)
         self.boton2.clicked.connect(self.setTexto)
-        self.enviar.clicked.connect(self.getTexto)
+        #self.enviar.clicked.connect(self.getTexto)
         self.CalcularBoton.clicked.connect(self.generaciones)
 
 
@@ -59,12 +60,24 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.FuncionText.setText("0.75*cos(1.50*x)*sin(1.50*x)-0.25*cos(0.25*x) ")
         
 
-    def getTexto(self):
-        print("enviar")        
-        textoValor = self.texto.toPlainText()
-        print(textoValor)
+    def validarCampos(self):
+        """ numGeneracionText
+        FuncionText
+        poblacionInicialText
+        precisionText
+        rangoInicioText
+        rangoFinText
+        poblacionMaximaText
+        decendenciaText
+        mutacionIndividuoText
+        mutacionGenText
+        maximoRadio
+        minimoRadio
+        usarPodacheck """
 
     def generaciones(self):
+        self.validarCampos()
+
         print("Generaciones")
         generaciones = int(self.numGeneracionText.text())
         for num in range(generaciones):
@@ -79,14 +92,12 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         numGeneraciones = int(self.numGeneracionText.text())
 
         images = []
-        for index in range(1, numGeneraciones):
-            # "graficas/Grafica_Generacion-"+ str( self.ID_IMAGES ) + ".png"
-
+        for index in range(1, numGeneraciones+1):
             path = cv2.imread('graficas/Grafica_Generacion-'+ str( index ) + '.png')  
             images.append(path)
 
         alto, ancho = path.shape[:2]
-        video = cv2.VideoWriter("video/video_generaciones.mp4", cv2.VideoWriter_fourcc(*"mp4v"), 2, (ancho, alto))
+        video = cv2.VideoWriter("video/video_generaciones.mp4", cv2.VideoWriter_fourcc(*"mp4v"), 1, (ancho, alto))
 
         for img in images:
             video.write(img)
@@ -511,6 +522,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 print("\nPoda de maximos")
                 for maximo in listaIndividuos:
                     print( str(maximo) )
+
             if tipoGrafico == "podaMin":
                 print("\nPoda de minimos")
                 for maximo in listaIndividuos:
@@ -543,8 +555,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             print("Sin poda")
     
     def graficarDatos(self, xMax, yMax, xMin, yMin, xProm, yProm, xPoda, yPoda):
-        print("Graficando")            
-        
+        print("Graficando")               
 
         if( len(xMax)>=1 ):
             plt.figure(figsize=(10,5))
@@ -564,7 +575,8 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             self.MEJORES_GENERACION.clear()
             self.PEORES_GENERACION.clear()
             self.PROMEDIO_GENERACIONES.clear()
-            self.ID_IMAGES = 0
+            self.BANDERA_FIN_HISTORICO = True
+            #self.ID_IMAGES = 0
 
         
         else:        
@@ -586,6 +598,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 plt.title("Generacion: "+ str(self.ID_IMAGES) +" | MINIMO" )
 
             plt.savefig("graficas/Grafica_Generacion-"+ str( self.ID_IMAGES ) + ".png")
+            
+            if self.BANDERA_FIN_HISTORICO:
+                self.ID_IMAGES = 0
             plt.close() 
         
             
