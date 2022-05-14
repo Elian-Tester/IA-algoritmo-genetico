@@ -24,14 +24,14 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     PEORES_GENERACION = []
     PROMEDIO_GENERACIONES = []
     ITERACION_GENERACION = 1
-    BANDERA_MAX = " "
+    BANDERA_MAX = True
     BANDERA_FIN_HISTORICO = False
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
 
-        self.boton1.clicked.connect(self.setPlot)
+        #self.boton1.clicked.connect(self.setPlot)
         self.boton2.clicked.connect(self.setTexto)
         #self.enviar.clicked.connect(self.getTexto)
         self.CalcularBoton.clicked.connect(self.generaciones)
@@ -241,22 +241,25 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         hijosCruza = []
 
         for datoBin in seleccion:
-            idA = str(arrayBits[datoBin[0]][0])
-            idB = str(arrayBits[datoBin[1]][0])
+            # Identificadores
 
-            """ print("A "+ str(datoBin[0]) +" corte: "+str(datoBin[3])  +" id: "+ idA +" bit: "+ str(arrayBits[datoBin[0]][1]) +" valor: "+ str(arrayBits[datoBin[0]][2]))
+            idA = str(arrayBits[datoBin[0]][0]) #id del binario original
+            idB = str(arrayBits[datoBin[1]][0]) #id del binario original
+
+            print("A "+ str(datoBin[0]) +" corte: "+str(datoBin[3])  +" id: "+ idA +" bit: "+ str(arrayBits[datoBin[0]][1]) +" valor: "+ str(arrayBits[datoBin[0]][2]))
             print("B "+ str(datoBin[1])+ " corte: "+str(datoBin[3])  +" id: "+ idB +" bit: "+ str(arrayBits[datoBin[1]][1]) +" valor: "+ str(arrayBits[datoBin[1]][2]))
-            print("\n") """
+            print("\n")
 
+            # binario a arreglo
             hijo1 = list(arrayBits[datoBin[0]][1])
             hijo2 = list(arrayBits[datoBin[1]][1])
 
-            """ print("hijo 1: "+str(hijo1))
-            print("hijo 2: "+str(hijo2)) """
+            print("hijo 1: "+str(hijo1))
+            print("hijo 2: "+str(hijo2))
 
-            rang1 = int(datoBin[3])
+            rang1 = int(datoBin[3]) #punto corte
             rang2 = len(str(arrayBits[datoBin[0]][1]))
-            """ print(rang2) """
+            print(rang2)
 
             corteA = ""
             corteA1 = ""
@@ -266,8 +269,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 else:
                     corteA1+=hijo1[corte1]
 
-            """ print("CA: "+corteA)
-            print("CA1: "+corteA1) """
 
             corteB = ""
             corteB1 = ""
@@ -277,14 +278,17 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 else:
                     corteB1+=hijo2[corte2]
                             
-            """ print("CB: "+corteB)
-            print("CB1: "+corteB1) """
+            print("\nCA1: "+corteA1)
+            print("CB: "+corteB)
+
+            print("\nCB1: "+corteB1)
+            print("CA: "+corteA)
 
             hijoA = corteA1 + corteB
             hijoB = corteB1 + corteA
 
-            """ print("hijo A: "+ hijoA)
-            print("hijo A: "+ hijoB) """
+            print("hijo A: "+ hijoA)
+            print("hijo A: "+ hijoB)
             
             hijosCruza.append([idA+idB+"-1" , hijoA])
             hijosCruza.append([idA+idB+"-2" , hijoB])
@@ -347,18 +351,15 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         poblacionMaxima = self.poblacionMaximaText.text()
 
         self.calcularCoordenadas(arrayBits, "historico")
-        podaSelect = self.usarPodacheck.isChecked()
         
-        print( "checked is: "+str(podaSelect) )
-        if podaSelect:
-            if len(arrayBits) > int(poblacionMaxima) :
-                print("debe ver poda: padre> "+ str(len(arrayBits)))
-                """ print("pob max: "+poblacionMaxima) """
-                
-                self.Poda(arrayBits)
-            else:            
-                print("No ocupa poda: padre>"+ str(len(arrayBits)))
-                self.calcularCoordenadas(arrayBits, "sin poda")
+        if len(arrayBits) > int(poblacionMaxima) :
+            print("debe ver poda: padre> "+ str(len(arrayBits)))
+            """ print("pob max: "+poblacionMaxima) """
+
+            self.Poda(arrayBits)
+        else:            
+            print("No ocupa poda: padre>"+ str(len(arrayBits)))
+            self.calcularCoordenadas(arrayBits, "sin poda")
             
     def Poda(self, arrayBits):
         print("\nInicia poda")
@@ -390,22 +391,26 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 print( str(index))
                 listaPodado.append(index)
 
-
-        if self.maximoRadio.isChecked():
+        if ( self.maximoRadio.isChecked()==False and self.minimoRadio.isChecked()==False ):
             print("\n Mayor a menor:")                        
-            self.calcularCoordenadas(listaPodado, "podaMax")
             self.BANDERA_MAX = True
-
+            self.calcularCoordenadas(listaPodado, "podaMax")
         else:
-            print("No ha seleccionado maximo")
+            if self.maximoRadio.isChecked():
+                print("\n Mayor a menor:")                        
+                self.BANDERA_MAX = True
+                self.calcularCoordenadas(listaPodado, "podaMax")
 
-        
-        if self.minimoRadio.isChecked() :
-            print("\n Menor a mayor:")            
-            self.calcularCoordenadas(listaPodado, "podaMin")
-            self.BANDERA_MAX = False
-        else:
-            print("No ha seleccionado minimo")
+            else:
+                print("No ha seleccionado maximo")
+
+            
+            if self.minimoRadio.isChecked() :
+                print("\n Menor a mayor:")            
+                self.BANDERA_MAX = False
+                self.calcularCoordenadas(listaPodado, "podaMin")
+            else:
+                print("No ha seleccionado minimo")
                 
 
     def calcularCoordenadas(self, listaIndividuos, tipoGrafico):
@@ -580,22 +585,23 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
         
         else:        
-            fig= plt.figure(figsize=(10,5))
+            self.ID_IMAGES+=1
+            fig= plt.figure()
             #fig.tight_layout()
             plt.subplot(1, 1, 1)
             
+            if self.BANDERA_MAX == True:
+                plt.title("Generacion: "+ str(self.ID_IMAGES) +" | MAXIMO" )
+            if self.BANDERA_MAX == False:
+                plt.title("Generacion: "+ str(self.ID_IMAGES) +" | MINIMO" )
+
             plt.xlim(-5, int(self.numGeneracionText.text() ))
             plt.ylim(-5, int(self.numGeneracionText.text() ))
 
             plt.scatter(xPoda,yPoda, label='Poda')            
 
-            plt.legend()        
-            self.ID_IMAGES+=1
+            plt.legend()                    
 
-            if self.BANDERA_MAX == True:
-                plt.title("Generacion: "+ str(self.ID_IMAGES) +" | MAXIMO" )
-            if self.BANDERA_MAX == False:
-                plt.title("Generacion: "+ str(self.ID_IMAGES) +" | MINIMO" )
 
             plt.savefig("graficas/Grafica_Generacion-"+ str( self.ID_IMAGES ) + ".png")
             
